@@ -1,5 +1,7 @@
 package valueobjects
 
+import "fmt"
+
 type Image struct {
 	imageName string
 	tag       string
@@ -18,4 +20,8 @@ func (i Image) Tag() string {
 
 func (i Image) ImageName() string {
 	return i.imageName
+}
+
+func (i Image) toYaml() string {
+	return fmt.Sprintf("%s:%s", i.imageName, i.tag)
 }
