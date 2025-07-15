@@ -65,3 +65,32 @@ func TestNewImage(t *testing.T) {
 		})
 	}
 }
+
+func TestImageToYaml(t *testing.T) {
+	tests := []struct {
+		name     string
+		image    Image
+		expected string
+	}{
+		{
+			name:     "nginx:latest",
+			image:    Image{imageName: "nginx", tag: "latest"},
+			expected: "nginx:latest",
+		},
+		{
+			name:     "example.com/my-app:latest",
+			image:    Image{imageName: "example.com/my-app", tag: "latest"},
+			expected: "example.com/my-app:latest",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			yaml := tt.image.toYaml()
+
+			if yaml != tt.expected {
+				t.Errorf("Image.toYaml() = %v, want %v", yaml, tt.expected)
+			}
+		})
+	}
+}
