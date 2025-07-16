@@ -31,7 +31,7 @@ func TestNewImage(t *testing.T) {
 			tag:       "",
 			expected:  Image{},
 			expectErr: true,
-			errorMsg:  "image or can't be empty",
+			errorMsg:  "image or tag can't be empty",
 		},
 		{
 			name:      "creates with empty image",
@@ -39,7 +39,7 @@ func TestNewImage(t *testing.T) {
 			tag:       "latest",
 			expected:  Image{},
 			expectErr: true,
-			errorMsg:  "image or can't be empty",
+			errorMsg:  "image or tag can't be empty",
 		},
 	}
 
@@ -86,7 +86,7 @@ func TestImageToYaml(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			yaml := tt.image.toYaml()
+			yaml := tt.image.ToYaml()
 
 			if yaml != tt.expected {
 				t.Errorf("Image.toYaml() = %v, want %v", yaml, tt.expected)

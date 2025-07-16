@@ -19,7 +19,7 @@ func (b Build) Dockerfile() string {
 	return b.dockerfile
 }
 
-func (b Build) toYaml() ([]byte, error) {
+func (b Build) ToYaml() ([]byte, error) {
 	data := struct {
 		Context    string `yaml:"context"`
 		Dockerfile string `yaml:"dockerfile"`

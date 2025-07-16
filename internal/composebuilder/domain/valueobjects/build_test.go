@@ -1,7 +1,10 @@
 package valueobjects
 
 import (
+	"reflect"
 	"testing"
+
+	"gopkg.in/yaml.v3"
 )
 
 func TestNewBuild(t *testing.T) {
@@ -16,6 +19,17 @@ func TestNewBuild(t *testing.T) {
 			context:    "",
 			dockerfile: "./Dockerfile",
 			want:       Build{context: "", dockerfile: "./Dockerfile"},
+		}, {
+			name:       "NewBuild",
+			context:    "./my-app  ",
+			dockerfile: "",
+			want:       Build{context: "./my-app  ", dockerfile: ""},
+		},
+		{
+			name:       "NewBuild",
+			context:    "./my-app  ",
+			dockerfile: "php.Dockerfile",
+			want:       Build{context: "./my-app  ", dockerfile: "php.Dockerfile"},
 		},
 	}
 
@@ -26,5 +40,71 @@ func TestNewBuild(t *testing.T) {
 			}
 		})
 	}
+}
 
+func TestBuild_ToYaml(t *testing.T) {
+	tests := []struct {
+		name       string
+		build      Build
+		wantFields map[string]string
+	}{
+		{
+			name:  "valid build with context and dockerfile",
+			build: NewBuild("./app", "Dockerfile"),
+			wantFields: map[string]string{
+				"context":    "./app",
+				"dockerfile": "Dockerfile",
+			},
+		},
+		{
+			name:  "valid build with context and dockerfile",
+			build: NewBuild("./app", "Dockerfile"),
+			wantFields: map[string]string{
+				"context":    "./app",
+				"dockerfile": "Dockerfile",
+			},
+		},
+		{
+			name:  "build with empty context",
+			build: NewBuild("", "Dockerfile.prod"),
+			wantFields: map[string]string{
+				"context":    "",
+				"dockerfile": "Dockerfile.prod",
+			},
+		},
+		{
+			name:  "build with empty Dockerfile",
+			build: NewBuild("/app/Dockerfiles", ""),
+			wantFields: map[string]string{
+				"context":    "/app/Dockerfiles",
+				"dockerfile": "",
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := tt.build.ToYaml()
+
+			if err != nil {
+				t.Errorf("ToYaml() error = %v", err)
+				return
+			}
+
+			var result map[string]string
+
+			err = yaml.Unmarshal(got, &result)
+
+			if err != nil {
+				t.Errorf("ToYaml() error = %v", err)
+				return
+			}
+
+			if !reflect.DeepEqual(result, tt.wantFields) {
+				t.Errorf("ToYaml() got = %v, want %v", result, tt.wantFields)
+				
+			}
+
+		})
+	}
 }

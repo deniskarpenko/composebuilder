@@ -12,7 +12,7 @@ type Image struct {
 
 func NewImage(imageName string, tag string) (Image, error) {
 	if imageName == "" || tag == "" {
-		return Image{}, errors.New("image or can't be empty")
+		return Image{}, errors.New("image or tag can't be empty")
 	}
 
 	return Image{
@@ -29,6 +29,6 @@ func (i Image) ImageName() string {
 	return i.imageName
 }
 
-func (i Image) toYaml() string {
+func (i Image) ToYaml() string {
 	return fmt.Sprintf("%s:%s", i.imageName, i.tag)
 }
