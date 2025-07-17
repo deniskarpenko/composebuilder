@@ -64,3 +64,25 @@ func TestNewEnv(t *testing.T) {
 		})
 	}
 }
+
+func TestEnv_ToYaml(t *testing.T) {
+	tests := []struct {
+		name     string
+		env      Env
+		expected string
+	}{
+		{
+			name:     "DEBUG: true",
+			env:      Env{variable: "DEBUG", value: "true"},
+			expected: "DEBUG: true",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.env.ToYaml(); got != tt.expected {
+				t.Errorf("ToYaml() = %v, want %v", got, tt.expected)
+			}
+		})
+	}
+}

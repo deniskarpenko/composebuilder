@@ -1,5 +1,7 @@
 package valueobjects
 
+import "fmt"
+
 type Volume struct {
 	source string
 	target string
@@ -18,4 +20,8 @@ func (v Volume) Source() string {
 
 func (v Volume) Target() string {
 	return v.target
+}
+
+func (v Volume) ToYaml() string {
+	return fmt.Sprintf("%s: %s", v.source, v.target)
 }

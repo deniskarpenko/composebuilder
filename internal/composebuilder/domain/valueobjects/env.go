@@ -30,5 +30,5 @@ func (env Env) Value() string {
 }
 
 func (env Env) ToYaml() string {
-	return fmt.Sprintf("%s:%s", env.variable, env.value)
+	return fmt.Sprintf("%s: %s", env.variable, env.value)
 }
