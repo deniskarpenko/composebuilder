@@ -37,3 +37,7 @@ func NewContainer(
 		dependsOn:     dependsOn,
 	}
 }
+
+func (c Container) ToYaml() ([]byte, error) {
+	
+}

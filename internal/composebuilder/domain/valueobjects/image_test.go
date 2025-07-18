@@ -86,9 +86,13 @@ func TestImageToYaml(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			yaml := tt.image.ToYaml()
+			yaml, err := tt.image.ToYaml()
 
-			if yaml != tt.expected {
+			if err != nil {
+				t.Errorf("ImageToYaml() error = %v", err)
+			}
+
+			if string(yaml) != tt.expected {
 				t.Errorf("Image.toYaml() = %v, want %v", yaml, tt.expected)
 			}
 		})

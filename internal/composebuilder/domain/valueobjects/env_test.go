@@ -80,8 +80,14 @@ func TestEnv_ToYaml(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.env.ToYaml(); got != tt.expected {
-				t.Errorf("ToYaml() = %v, want %v", got, tt.expected)
+			got, err := tt.env.ToYaml()
+
+			if err != nil {
+				t.Errorf("ToYaml() error = %v", err)
+			}
+
+			if string(got) != tt.expected {
+				t.Errorf("ToYaml() got = %v, want %v", string(got), tt.expected)
 			}
 		})
 	}

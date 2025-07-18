@@ -29,6 +29,7 @@ func (env Env) Value() string {
 	return env.value
 }
 
-func (env Env) ToYaml() string {
-	return fmt.Sprintf("%s: %s", env.variable, env.value)
+func (env Env) ToYaml() ([]byte, error) {
+	yamlData := fmt.Sprintf("%s: %s", env.variable, env.value)
+	return []byte(yamlData), nil
 }

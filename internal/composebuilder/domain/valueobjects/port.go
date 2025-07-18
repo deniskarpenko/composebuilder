@@ -25,10 +25,10 @@ func (p Ports) HasContainerPort() bool {
 	return p.containerPort != nil
 }
 
-func (p Ports) ToYaml() string {
-	if p.HasContainerPort() {
-		return fmt.Sprintf("%d", p.host)
+func (p Ports) ToYaml() ([]byte, error) {
+	if !p.HasContainerPort() {
+		return []byte(fmt.Sprintf("%d", p.host)), nil
 	}
 
-	return fmt.Sprintf("%d:%d", p.host, p.containerPort)
+	return []byte(fmt.Sprintf("%d:%d", p.host, p.containerPort)), nil
 }

@@ -22,6 +22,6 @@ func (v Volume) Target() string {
 	return v.target
 }
 
-func (v Volume) ToYaml() string {
-	return fmt.Sprintf("%s: %s", v.source, v.target)
+func (v Volume) ToYaml() ([]byte, error) {
+	return []byte(fmt.Sprintf("%s: %s", v.source, v.target)), nil
 }
