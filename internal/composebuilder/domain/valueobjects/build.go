@@ -30,3 +30,7 @@ func (b Build) ToYaml() ([]byte, error) {
 
 	return yaml.Marshal(data)
 }
+
+func (b Build) ToYamlData() (interface{}, error) {
+	return b.ToYaml()
+}

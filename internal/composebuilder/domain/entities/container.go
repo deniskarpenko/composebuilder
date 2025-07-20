@@ -1,6 +1,10 @@
 package entities
 
-import "github.com/deniskarpenko/composebuilder/internal/composebuilder/domain/valueobjects"
+import (
+	"log/slog"
+
+	"github.com/deniskarpenko/composebuilder/internal/composebuilder/domain/valueobjects"
+)
 
 type Container struct {
 	containerName string
@@ -12,6 +16,7 @@ type Container struct {
 	envFiles      *[]string
 	networks      *[]string
 	dependsOn     *[]string
+	logger        *slog.Logger
 }
 
 func NewContainer(
@@ -24,6 +29,7 @@ func NewContainer(
 	envFiles *[]string,
 	networks *[]string,
 	dependsOn *[]string,
+	logger *slog.Logger,
 ) Container {
 	return Container{
 		containerName: containerName,
@@ -35,9 +41,29 @@ func NewContainer(
 		envFiles:      envFiles,
 		networks:      networks,
 		dependsOn:     dependsOn,
+		logger:        logger,
 	}
 }
 
 func (c Container) ToYaml() ([]byte, error) {
-	
+	service := make(map[string]interface{})
+
+	if c.image != nil {
+		imageYaml, err := c.image.ToYaml()
+	}
+
+}
+
+func (c Container) AddImageToService(service map[string]interface{}) error {
+	if c.image == nil {
+		return nil
+	}
+
+	imageYaml, err := c.image.ToYaml()
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
