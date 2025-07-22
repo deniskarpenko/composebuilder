@@ -1,7 +1,5 @@
 package valueobjects
 
-import "gopkg.in/yaml.v3"
-
 type Build struct {
 	context    string
 	dockerfile string
@@ -19,18 +17,12 @@ func (b Build) Dockerfile() string {
 	return b.dockerfile
 }
 
-func (b Build) ToYaml() ([]byte, error) {
-	data := struct {
+func (b Build) ToYamlData() (interface{}, error) {
+	return struct {
 		Context    string `yaml:"context"`
 		Dockerfile string `yaml:"dockerfile"`
 	}{
 		Context:    b.context,
 		Dockerfile: b.dockerfile,
-	}
-
-	return yaml.Marshal(data)
-}
-
-func (b Build) ToYamlData() (interface{}, error) {
-	return b.ToYaml()
+	}, nil
 }

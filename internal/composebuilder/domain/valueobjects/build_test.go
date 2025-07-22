@@ -46,12 +46,12 @@ func TestBuild_ToYaml(t *testing.T) {
 	tests := []struct {
 		name       string
 		build      Build
-		wantFields map[string]string
+		expected   interface{}
 	}{
 		{
 			name:  "valid build with context and dockerfile",
 			build: NewBuild("./app", "Dockerfile"),
-			wantFields: map[string]string{
+			: map[string]string{
 				"context":    "./app",
 				"dockerfile": "Dockerfile",
 			},
@@ -84,7 +84,7 @@ func TestBuild_ToYaml(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := tt.build.ToYaml()
+			got, err := tt.build.ToYamlData()
 
 			if err != nil {
 				t.Errorf("ToYaml() error = %v", err)
@@ -102,7 +102,7 @@ func TestBuild_ToYaml(t *testing.T) {
 
 			if !reflect.DeepEqual(result, tt.wantFields) {
 				t.Errorf("ToYaml() got = %v, want %v", result, tt.wantFields)
-				
+
 			}
 
 		})

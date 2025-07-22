@@ -33,3 +33,9 @@ func (env Env) ToYaml() ([]byte, error) {
 	yamlData := fmt.Sprintf("%s: %s", env.variable, env.value)
 	return []byte(yamlData), nil
 }
+
+func (env Env) ToYamlData() (interface{}, error) {
+	return map[string]interface{}{
+		env.variable: env.value,
+	}, nil
+}
