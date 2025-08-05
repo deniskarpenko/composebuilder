@@ -13,7 +13,7 @@ func TestNewContainerBuilder(t *testing.T) {
 	builder := NewContainerBuilder(containerName, logger)
 
 	if builder == nil {
-		t.Fatal("Expected builder to be non-nil")m
+		t.Fatal("Expected builder to be non-nil")
 	}
 
 }
