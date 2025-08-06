@@ -19,6 +19,10 @@ type Container struct {
 	logger        *slog.Logger
 }
 
+func (c *Container) Logger() *slog.Logger {
+	return c.logger
+}
+
 type ContainerBuilder struct {
 	container Container
 }
