@@ -4,6 +4,8 @@ import (
 	"log/slog"
 	"os"
 	"testing"
+
+	"github.com/deniskarpenko/composebuilder/internal/composebuilder/domain/valueobjects"
 )
 
 func TestNewContainerBuilder(t *testing.T) {
@@ -39,5 +41,43 @@ func TestNewContainerBuilder(t *testing.T) {
 	if builder.container.envFiles == nil || len(builder.container.envFiles) != 0 {
 		t.Fatal("Expected container.envFiles to be non-nil and len 0")
 	}
+
+}
+
+func TestContainerBuilderCompleteFlow(t *testing.T) {
+	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+	containerName := "Complete-Container"
+
+	nginxImage, err := valueobjects.NewImage("nginx", "latest")
+
+	if err != nil {
+		t.Fatal("Failed to create image object")
+	}
+	build := valueobjects.NewBuild("./dockerfiles/", "nginx.Dockerfile")
+	ports := valueobjects.NewPorts(80, func() *int { i := 80; return &i }())
+	volumes := valueobjects.NewVolume("./app/", "/var/www/html/")
+
+	envs, err := valueobjects.NewEnv("LOG_LEVEL", "DEBUG")
+
+	if err != nil {
+		t.Fatal("Failed to create env object")
+	}
+
+	envFiles := []string{
+		"/envs/test.env",
+	}
+
+	networks := []string{
+		"test_network",
+	}
+
+	dependsOn := []string{
+		"mysql",
+	}
+
+	builder := NewContainerBuilder(containerName, logger)
+
+	builder = builder.WithImage(&nginxImage).WithBuild(&build).WithPorts(ports).WithVolumes(volumes).WithEnvs(envs)
+	builder = builder.WithEnvFiles(envFiles).WithNetworks(networks).WithDependencies(dependsOn)
 
 }
