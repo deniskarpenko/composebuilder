@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/deniskarpenko/composebuilder/internal/composebuilder/domain/valueobjects"
+	"github.com/deniskarpenko/composebuilder/internal/servicebuilder/domain/valueobjects"
 )
 
 func TestNewContainerBuilder(t *testing.T) {
@@ -78,6 +78,6 @@ func TestContainerBuilderCompleteFlow(t *testing.T) {
 	builder := NewContainerBuilder(containerName, logger)
 
 	builder = builder.WithImage(&nginxImage).WithBuild(&build).WithPorts(ports).WithVolumes(volumes).WithEnvs(envs)
-	builder = builder.WithEnvFiles(envFiles).WithNetworks(networks).WithDependencies(dependsOn)
+	builder = builder.WithEnvFiles(envFiles...).WithNetworks(networks...).WithDependencies(dependsOn...)
 
 }

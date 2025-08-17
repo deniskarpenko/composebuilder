@@ -1,8 +1,8 @@
 package interfaces
 
 import (
-	"github.com/deniskarpenko/composebuilder/internal/composebuilder/domain/entities"
-	"github.com/deniskarpenko/composebuilder/internal/composebuilder/domain/valueobjects"
+	"github.com/deniskarpenko/composebuilder/internal/servicebuilder/domain/entities"
+	"github.com/deniskarpenko/composebuilder/internal/servicebuilder/domain/valueobjects"
 )
 
 type ContainerBuilder interface {

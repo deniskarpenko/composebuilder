@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/deniskarpenko/composebuilder/internal/composebuilder/domain/entities"
+	"github.com/deniskarpenko/composebuilder/internal/servicebuilder/domain/entities"
 )
 
 func main() {

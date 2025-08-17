@@ -3,7 +3,7 @@ package entities
 import (
 	"log/slog"
 
-	"github.com/deniskarpenko/composebuilder/internal/composebuilder/domain/valueobjects"
+	"github.com/deniskarpenko/composebuilder/internal/servicebuilder/domain/valueobjects"
 )
 
 type Container struct {
