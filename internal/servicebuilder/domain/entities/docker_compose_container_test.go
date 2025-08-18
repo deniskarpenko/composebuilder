@@ -80,4 +80,18 @@ func TestContainerBuilderCompleteFlow(t *testing.T) {
 	builder = builder.WithImage(&nginxImage).WithBuild(&build).WithPorts(ports).WithVolumes(volumes).WithEnvs(envs)
 	builder = builder.WithEnvFiles(envFiles...).WithNetworks(networks...).WithDependencies(dependsOn...)
 
+	container := builder.Build()
+
+	if container.containerName != containerName {
+		t.Fatal("Expected container.containerName to be ", containerName)
+	}
+
+	if container.logger != logger {
+		t.Fatal("Expected container.logger to be ", logger)
+	}
+
+	if container.image.ImageName() != nginxImage.ImageName() || container.image.Tag() != nginxImage.Tag() {
+		t.Fatal("Expected container.image to be ", nginxImage.ImageName()+":"+container.image.Tag())
+	}
+
 }
