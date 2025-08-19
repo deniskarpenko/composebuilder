@@ -1,6 +1,7 @@
 package entities
 
 import (
+	"fmt"
 	"log/slog"
 	"os"
 	"testing"
@@ -44,54 +45,63 @@ func TestNewContainerBuilder(t *testing.T) {
 
 }
 
-func TestContainerBuilderCompleteFlow(t *testing.T) {
+func TestContainerBuilderWithImage(t *testing.T) {
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
-	containerName := "Complete-Container"
+	containerName := "nginx-container"
 
-	nginxImage, err := valueobjects.NewImage("nginx", "latest")
+	builder := NewContainerBuilder(containerName, logger)
+
+	imageName := "nginx"
+
+	tag := "latest"
+
+	yamlData := fmt.Sprintf("%s:%s", imageName, tag)
+
+	nginxImage, err := valueobjects.NewImage(imageName, tag)
 
 	if err != nil {
 		t.Fatal("Failed to create image object")
 	}
-	build := valueobjects.NewBuild("./dockerfiles/", "nginx.Dockerfile")
-	ports := valueobjects.NewPorts(80, func() *int { i := 80; return &i }())
-	volumes := valueobjects.NewVolume("./app/", "/var/www/html/")
 
-	envs, err := valueobjects.NewEnv("LOG_LEVEL", "DEBUG")
-
-	if err != nil {
-		t.Fatal("Failed to create env object")
-	}
-
-	envFiles := []string{
-		"/envs/test.env",
-	}
-
-	networks := []string{
-		"test_network",
-	}
-
-	dependsOn := []string{
-		"mysql",
-	}
-
-	builder := NewContainerBuilder(containerName, logger)
-
-	builder = builder.WithImage(&nginxImage).WithBuild(&build).WithPorts(ports).WithVolumes(volumes).WithEnvs(envs)
-	builder = builder.WithEnvFiles(envFiles...).WithNetworks(networks...).WithDependencies(dependsOn...)
+	builder.WithImage(&nginxImage)
 
 	container := builder.Build()
 
-	if container.containerName != containerName {
-		t.Fatal("Expected container.containerName to be ", containerName)
+	if container.image.ImageName() != nginxImage.ImageName() {
+		t.Fatal("Expected container.image.ImageName to be ", nginxImage.ImageName())
 	}
 
-	if container.logger != logger {
-		t.Fatal("Expected container.logger to be ", logger)
+	if container.image.Tag() != nginxImage.Tag() {
+		t.Fatal("Expected container.image.Tag to be ", nginxImage.Tag())
 	}
 
-	if container.image.ImageName() != nginxImage.ImageName() || container.image.Tag() != nginxImage.Tag() {
-		t.Fatal("Expected container.image to be ", nginxImage.ImageName()+":"+container.image.Tag())
+	if string(container.image.ToYaml()) != string([]byte(yamlData)) {
+		t.Fatal("Expected container.image.ToYaml to be ", yamlData)
+	}
+
+}
+
+func TestContainerBuilderWithBuild(t *testing.T) {
+	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+	containerName := "nginx-container"
+	builder := NewContainerBuilder(containerName, logger)
+
+	context := "."
+
+	dockerfile := "php.Dockerfile"
+
+	build := valueobjects.NewBuild(context, dockerfile)
+
+	builder.WithBuild(&build)
+
+	container := builder.Build()
+
+	if container.build.Context() != build.Context() {
+		t.Fatal("Expected container.build.Dockerfile to be ", build.Context())
+	}
+
+	if container.build.Dockerfile() != build.Dockerfile() {
+		t.Fatal("Expected container.build.Dockerfile to be ", build.Dockerfile())
 	}
 
 }

@@ -29,7 +29,7 @@ func (i Image) ImageName() string {
 	return i.imageName
 }
 
-func (i Image) ToYaml() ([]byte, error) {
+func (i Image) ToYaml() []byte {
 	yamlData := fmt.Sprintf("%s:%s", i.imageName, i.tag)
-	return []byte(yamlData), nil
+	return []byte(yamlData)
 }
