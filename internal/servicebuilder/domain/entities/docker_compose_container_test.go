@@ -9,6 +9,16 @@ import (
 	"github.com/deniskarpenko/composebuilder/internal/servicebuilder/domain/valueobjects"
 )
 
+func createImage(t *testing.T, imageName string, tag string) valueobjects.Image {
+	image, err := valueobjects.NewImage(imageName, tag)
+
+	if err != nil {
+		t.Fatalf("could not create image: %v", err)
+	}
+
+	return image
+}
+
 func TestNewContainerBuilder(t *testing.T) {
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
 	containerName := "test container"
@@ -57,11 +67,7 @@ func TestContainerBuilderWithImage(t *testing.T) {
 
 	yamlData := fmt.Sprintf("%s:%s", imageName, tag)
 
-	nginxImage, err := valueobjects.NewImage(imageName, tag)
-
-	if err != nil {
-		t.Fatal("Failed to create image object")
-	}
+	nginxImage := createImage(t, imageName, tag)
 
 	builder.WithImage(&nginxImage)
 
@@ -104,4 +110,15 @@ func TestContainerBuilderWithBuild(t *testing.T) {
 		t.Fatal("Expected container.build.Dockerfile to be ", build.Dockerfile())
 	}
 
+}
+
+func TestContainerBuilderCompleteFlow(t *testing.T) {
+	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+	containerName := "complete-flow"
+
+	image := createImage(t, "mysql", "latest")
+
+	builder := NewContainerBuilder(containerName, logger)
+
+	builder.WithImage(&image)
 }
