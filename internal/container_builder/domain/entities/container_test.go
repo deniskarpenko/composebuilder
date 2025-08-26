@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/deniskarpenko/composebuilder/internal/servicebuilder/domain/valueobjects"
+	"github.com/deniskarpenko/composebuilder/internal/container_builder/domain/valueobjects"
 )
 
 func createImage(t *testing.T, imageName string, tag string) valueobjects.Image {
@@ -118,7 +118,9 @@ func TestContainerBuilderCompleteFlow(t *testing.T) {
 
 	image := createImage(t, "mysql", "latest")
 
+	ports := valueobjects.NewPorts(80, func() *int { i := 8080; return &i }())
+
 	builder := NewContainerBuilder(containerName, logger)
 
-	builder.WithImage(&image)
+	builder.WithImage(&image).WithPorts(ports)
 }
