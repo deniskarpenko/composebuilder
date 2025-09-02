@@ -1,11 +1,11 @@
 package dto
 
 type Port struct {
-	hostPort      string
+	hostPort      uint
 	containerPort uint
 }
 
-func NewPort(hostPort string, containerPort uint) Port {
+func NewPort(hostPort uint, containerPort uint) Port {
 	return Port{hostPort: hostPort, containerPort: containerPort}
 }
 
@@ -78,4 +78,8 @@ func NewContainer(
 		envFiles:  envFiles,
 		dependsOn: dependsOn,
 	}
+}
+
+func (c *Container) Name() string {
+	return c.name
 }
