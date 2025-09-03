@@ -2,12 +2,12 @@ package dto
 
 type Project struct {
 	projectName string
-	containers  []*Container
+	containers  *[]Container
 }
 
-func NewProject(projectName string, containers *Container) *Project {
+func NewProject(projectName string, containers *[]Container) *Project {
 	return &Project{
 		projectName: projectName,
-		containers:  []*Container{containers},
+		containers:  containers,
 	}
 }

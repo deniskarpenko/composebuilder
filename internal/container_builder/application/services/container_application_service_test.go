@@ -14,7 +14,15 @@ func TestContainerApplicationService_CreateApplication(t *testing.T) {
 	phpContainer := createPhpContainer(network, []string{mySqlContainer.Name()})
 	nginxContainer := createNginxContainer(network, []string{phpContainer.Name()})
 
-	fmt.Println("phpContainer:", nginxContainer)
+	containers := []dto.Container{
+		mySqlContainer,
+		phpContainer,
+		nginxContainer,
+	}
+
+	project := dto.NewProject("test-project", &containers)
+
+	fmt.Println("project:", project)
 }
 
 func createMysqlContainer(network string, dependsOn []string) dto.Container {
@@ -26,7 +34,12 @@ func createMysqlContainer(network string, dependsOn []string) dto.Container {
 		nil,
 		[]dto.Port{dto.NewPort(3306, 3306)},
 		nil,
-		nil,
+		[]dto.Env{
+			dto.NewEnv("MYSQL_ROOT_PASSWORD", "root"),
+			dto.NewEnv("MYSQL_DATABASE", "db"),
+			dto.NewEnv("MYSQL_USER", "user"),
+			dto.NewEnv("MYSQL_PASSWORD", "pass"),
+		},
 		nil,
 		[]string{network},
 		dependsOn,
