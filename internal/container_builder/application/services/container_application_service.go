@@ -1,9 +1,20 @@
 package services
 
-import "github.com/deniskarpenko/composebuilder/internal/container_builder/application/dto"
+import (
+	"github.com/deniskarpenko/composebuilder/internal/container_builder/application/dto"
+	"github.com/deniskarpenko/composebuilder/internal/container_builder/application/interfaces"
+)
 
-type ContainerApplicationService struct{}
+type ContainerApplicationService struct {
+	logger interfaces.Logger
+}
 
-func (s *ContainerApplicationService) CreateApplication(project dto.Project) {
+func NewContainerApplicationService(log interfaces.Logger) *ContainerApplicationService {
+	return &ContainerApplicationService{
+		logger: log,
+	}
+}
+
+func (s *ContainerApplicationService) CreateApplication(app dto.Application) {
 
 }
